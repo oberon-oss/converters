@@ -37,11 +37,8 @@ public final class BiDirectionalConvertersRegistry {
             registerConverter(converter);
         }
 
-
         //noinspection rawtypes
-        ServiceLoader<Converter> stringConverterLoader = ServiceLoader.load(
-                Converter.class,
-                BiDirectionalConvertersRegistry.class.getClassLoader());
+        ServiceLoader<Converter> stringConverterLoader = ServiceLoader.load(Converter.class, BiDirectionalConvertersRegistry.class.getClassLoader());
 
         for (Converter<?> converter : stringConverterLoader) {
             registerConverter(converter);
@@ -51,8 +48,8 @@ public final class BiDirectionalConvertersRegistry {
     /**
      * Retrieves a converter for a specific source and target type.
      *
-     * @param sourceType the source type
-     * @param targetType the target type
+     * @param sourceType the source type class
+     * @param targetType the target type class
      * @param <S>        the source type
      * @param <T>        the target type
      *
@@ -76,25 +73,48 @@ public final class BiDirectionalConvertersRegistry {
     }
 
     /**
-     * Registers a bidirectional converter. If a converter for the same source and target type is already registered, it will be replaced.
+     * Registers a converter.
+     * <p>
+     * Only one converter may exist for a type pair ({@code <S>} and {@code <T> }, regardless of direction. Registering another converter for the same type pair
+     * is rejected.
      *
-     * @param converter the converter to register
+     * @param converter The converter to register. Must not be {@code null}.
      *
-     * @throws NullPointerException if 'converter' is null
+     * @throws NullPointerException     if {@code converter} is null
+     * @throws IllegalArgumentException if a converter for the same type pair is already registered
      * @since 1.0.0
      */
     public void registerConverter(@NotNull BiDirectionalConverter<?, ?> converter) {
         Objects.requireNonNull(converter, "Parameter: converter");
 
-        BiDirectionalConverter<?, ?> existingConverter = getConverterForClassTypes(converter.getSourceType(), converter.getTargetType());
+        BiDirectionalConverter<?, ?> existingConverter = getConverterForClassTypes(
+                converter.getSourceType(),
+                converter.getTargetType());
 
         if (existingConverter != null) {
-            LOGGER.info(
-                    "Replacing already registered converter for source type {} and target type {}",
-                    converter.getSourceType(),
-                    converter.getTargetType());
-            converters.remove(existingConverter);
+            throw new IllegalArgumentException(
+                    "Converter for source type %s and target type %s is already registered"
+                            .formatted(converter.getSourceType().getName(), converter.getTargetType().getName()));
         }
+
+        BiDirectionalConverter<?, ?> reverseConverter = getConverterForClassTypes(
+                converter.getTargetType(),
+                converter.getSourceType());
+
+        if (reverseConverter != null) {
+            throw new IllegalArgumentException(
+                    "Converter for reverse type pair %s and %s conflicts with already registered converter %s -> %s"
+                            .formatted(
+                                    converter.getSourceType().getName(),
+                                    converter.getTargetType().getName(),
+                                    reverseConverter.getSourceType().getName(),
+                                    reverseConverter.getTargetType().getName()));
+        }
+
+        LOGGER.info(
+                "Registered converter for source type {} and target type {}",
+                converter.getSourceType(),
+                converter.getTargetType());
 
         converters.add(converter);
     }

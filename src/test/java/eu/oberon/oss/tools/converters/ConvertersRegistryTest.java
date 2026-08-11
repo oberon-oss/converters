@@ -36,7 +36,7 @@ class ConvertersRegistryTest {
     }
 
     @Test
-    void testConverterReplacement() {
+    void testRegisterConverterRejectsDuplicateConverter() {
         Converter<Integer> newConverter = new Converter<>() {
             @Override
             public Class<Integer> getTypeClass() {
@@ -54,15 +54,13 @@ class ConvertersRegistryTest {
             }
         };
 
-        registry.registerConverter(newConverter);
-        Converter<Integer> converter = registry.getConverterForClassType(Integer.class);
-        assertNotNull(converter);
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> registry.registerConverter(newConverter));
 
-        assertEquals(Integer.MAX_VALUE, converter.convertFromString().apply("test-converter"));
-        assertEquals("test-converter", converter.convertToString().apply(Integer.MAX_VALUE));
-
-        assertEquals(0, converter.convertFromString().apply("test-converter2"));
-        assertNull(converter.convertToString().apply(0));
+        assertTrue(exception.getMessage().contains(Integer.class.getName()));
+        assertTrue(exception.getMessage().contains(String.class.getName()));
+        assertTrue(exception.getMessage().contains("already registered"));
     }
 
     @ParameterizedTest
