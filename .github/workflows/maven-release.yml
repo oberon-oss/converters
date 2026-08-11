@@ -1,0 +1,21 @@
+name: Publish package to Maven Central
+
+on:
+    release:
+        types:
+            - created
+
+jobs:
+    release:
+        uses: oberon-oss/github-workflows/.github/workflows/maven-release.yml@943f8beb2855a375762871682fdbbe5095c62409 # v1.5
+        with:
+            java-version: '25'
+            release-maven-profiles: central-release,generate-javadoc-and-source
+            sonar-project-key: oberon-oss_converters
+            sonar-quality-gate-blocking: true
+        secrets:
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+            CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
+            GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+            GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
