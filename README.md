@@ -67,6 +67,9 @@ A special case is also provided for enum classes, allowing enum values to be con
 
 ```java
 import eu.oberon.oss.tools.converters.ConvertersRegistry; import eu.oberon.oss.tools.converters.string.Converter;
+
+import java.util.Objects;
+
 public class IntegerConversionExample {
     static void main(String[] args) {
         ConvertersRegistry registry = new ConvertersRegistry();
@@ -74,7 +77,7 @@ public class IntegerConversionExample {
 
         Converter<Integer> converter = registry.getConverterForClassType(Integer.class);
 
-        Integer value = converter.convertFromString().apply("123");
+        Integer value = Objects.requireNonNull(converter).convertFromString().apply("123");
         String text = converter.convertToString().apply(value);
 
         System.out.println(value); // 123
@@ -88,6 +91,8 @@ public class IntegerConversionExample {
 import eu.oberon.oss.tools.converters.ConvertersRegistry; 
 import eu.oberon.oss.tools.converters.string.Converter;
 
+import java.util.Objects;
+
 public class EnumConversionExample {
     enum Environment {DEVELOPMENT, TEST, PRODUCTION}
 
@@ -96,7 +101,7 @@ public class EnumConversionExample {
 
         Converter<Environment> converter = registry.getConverterForClassType(Environment.class);
 
-        Environment environment = converter.convertFromString().apply("PRODUCTION");
+        Environment environment = Objects.requireNonNull(converter).convertFromString().apply("PRODUCTION");
         String text = converter.convertToString().apply(environment);
 
         System.out.println(environment); // PRODUCTION
@@ -159,6 +164,8 @@ Custom converters can be registered in a `BiDirectionalConvertersRegistry`.
 import eu.oberon.oss.tools.converters.BiDirectionalConverter; 
 import eu.oberon.oss.tools.converters.BiDirectionalConvertersRegistry;
 
+import java.util.Objects;
+
 public class CustomRegistryExample {
     static void main(String[] args) {
         BiDirectionalConvertersRegistry registry = new BiDirectionalConvertersRegistry();
@@ -170,7 +177,7 @@ public class CustomRegistryExample {
         BiDirectionalConverter<CustomConversionExample.CustomTestClass, String> registeredConverter =
                 registry.getConverterForClassTypes(CustomConversionExample.CustomTestClass.class, String.class);
 
-        String text = registeredConverter.getToTargetFunction().apply(
+        String text = Objects.requireNonNull(registeredConverter).getToTargetFunction().apply(
                 new CustomConversionExample.CustomTestClass(
                         java.util.UUID.randomUUID(),
                         java.time.LocalDate.of(2026, 8, 11),
