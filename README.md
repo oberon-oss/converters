@@ -1,8 +1,4 @@
-# Converters
-
-### Generic tool to provide services for converting between different class types. 
-
-### Quality status
+# Build status
 [![Quality gate status](https://sonarcloud.io/api/project_badges/measure?project=oberon-oss_converters&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oberon-oss_converters)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=oberon-oss_converters&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=oberon-oss_converters)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=oberon-oss_converters&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=oberon-oss_converters)
@@ -16,3 +12,19 @@
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=oberon-oss_converters&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=oberon-oss_converters)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=oberon-oss_converters&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=oberon-oss_converters)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=oberon-oss_converters&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=oberon-oss_converters)
+
+# Converters
+
+Generic tool to provide services for converting between different class types. A number of standard converters are provided for converting between different
+class types that can between some of Java's basic types and string values and vice versa.
+
+1. Boolean
+2. Byte
+3. Double
+4. Float
+5. Integer
+6. Long
+7. Short
+8. String
+
+A special case has been added to support converting between Enum classes and String values. 
