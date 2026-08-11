@@ -68,7 +68,7 @@ A special case is also provided for enum classes, allowing enum values to be con
 ```java
 import eu.oberon.oss.tools.converters.ConvertersRegistry; import eu.oberon.oss.tools.converters.string.Converter;
 public class IntegerConversionExample {
-    public static void main(String[] args) {
+    static void main(String[] args) {
         ConvertersRegistry registry = new ConvertersRegistry();
 
 
@@ -91,7 +91,7 @@ import eu.oberon.oss.tools.converters.string.Converter;
 public class EnumConversionExample {
     enum Environment {DEVELOPMENT, TEST, PRODUCTION}
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         ConvertersRegistry registry = new ConvertersRegistry();
 
         Converter<Environment> converter = registry.getConverterForClassType(Environment.class);
@@ -135,7 +135,7 @@ public class CustomConversionExample {
         }
     }
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         UUID uuid = UUID.randomUUID();
         LocalDate localDate = LocalDate.of(2026, 8, 11);
         String description = "test";
@@ -160,7 +160,7 @@ import eu.oberon.oss.tools.converters.BiDirectionalConverter;
 import eu.oberon.oss.tools.converters.BiDirectionalConvertersRegistry;
 
 public class CustomRegistryExample {
-    public static void main(String[] args) {
+    static void main(String[] args) {
         BiDirectionalConvertersRegistry registry = new BiDirectionalConvertersRegistry();
         CustomConversionExample.CustomTestClassConverter converter =
                 new CustomConversionExample.CustomTestClassConverter();
@@ -218,7 +218,7 @@ public class DuplicateConverterExample { record UserId(long value) { }
         }
     }
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         BiDirectionalConvertersRegistry registry = new BiDirectionalConvertersRegistry();
 
         registry.registerConverter(new UserIdToStringConverter());
