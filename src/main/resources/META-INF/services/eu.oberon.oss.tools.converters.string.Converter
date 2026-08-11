@@ -1,0 +1,7 @@
+eu.oberon.oss.tools.converters.string.std.BooleanConverter
+eu.oberon.oss.tools.converters.string.std.ByteConverter
+eu.oberon.oss.tools.converters.string.std.ShortConverter
+eu.oberon.oss.tools.converters.string.std.IntegerConverter
+eu.oberon.oss.tools.converters.string.std.LongConverter
+eu.oberon.oss.tools.converters.string.std.FloatConverter
+eu.oberon.oss.tools.converters.string.std.DoubleConverter
