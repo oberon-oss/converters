@@ -51,6 +51,7 @@ class BiDirectionalConvertersRegistryTest {
         assertEquals("Parameter: sourceType", exception.getMessage());
     }
 
+    @SuppressWarnings("DataFlowIssue")
     @Test
     void testGetConverterForClassTypesRejectsNullTargetType() {
         BiDirectionalConvertersRegistry registry = new BiDirectionalConvertersRegistry();
