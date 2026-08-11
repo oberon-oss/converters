@@ -37,7 +37,7 @@ class ConvertersRegistryTest {
 
     @Test
     void testConverterReplacement() {
-        Converter<Integer> newConverter = new Converter<Integer>() {
+        Converter<Integer> newConverter = new Converter<>() {
             @Override
             public Class<Integer> getTypeClass() {
                 return Integer.class;

@@ -182,7 +182,7 @@ class ConverterTest {
         LocalDate localDate = LocalDate.of(2026, Month.AUGUST, 11);
         String description = "test";
 
-        String expectedString = uuid.toString() + "\t" + localDate.toString() + "\t" + description;
+        String expectedString = uuid + "\t" + localDate + "\t" + description;
 
         CustomTestClass customTestClass = new CustomTestClass(uuid, localDate, description);
         CustomTestClassConverter converter = new CustomTestClassConverter();
