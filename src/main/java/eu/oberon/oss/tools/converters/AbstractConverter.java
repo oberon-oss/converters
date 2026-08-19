@@ -39,6 +39,29 @@ public abstract class AbstractConverter<S, T> implements BiDirectionalConverter<
         this.targetToSource = targetToSource;
     }
 
+    /**
+     * Creates a concrete bidirectional converter with the specified source and target types and conversion functions.
+     *
+     * @param sourceType     the source type to be converted
+     * @param targetType     the target type to be converted
+     * @param sourceToTarget the function to convert from the source type to the target type
+     * @param targetToSource the function to convert from the target type to the source type
+     * @param <S>            the source type
+     * @param <T>            the target type
+     *
+     * @return a concrete bidirectional converter
+     *
+     * @since 1.1.0
+     */
+    public static <S, T> BiDirectionalConverter<S, T> of(
+            Class<S> sourceType,
+            Class<T> targetType,
+            Function<S, T> sourceToTarget,
+            Function<T, S> targetToSource) {
+        return new AbstractConverter<>(sourceType, targetType, sourceToTarget, targetToSource) {
+        };
+    }
+
     @Override
     public Class<S> getSourceType() {
         return sourceType;

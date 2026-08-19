@@ -63,6 +63,15 @@ class ConvertersRegistryTest {
         assertTrue(exception.getMessage().contains("already registered"));
     }
 
+    @Test
+    void testEnumConverterIsRegisteredAfterFirstLookup() {
+        Converter<ConfigTestEnum> firstConverter = assertDoesNotThrow(() -> registry.getConverterForClassType(ConfigTestEnum.class));
+        Converter<ConfigTestEnum> secondConverter = assertDoesNotThrow(() -> registry.getConverterForClassType(ConfigTestEnum.class));
+
+        assertNotNull(firstConverter);
+        assertSame(firstConverter, secondConverter);
+    }
+
     @ParameterizedTest
     @MethodSource()
     void testConvertersRegistry(Class<?> classType, String value, Object expected) {

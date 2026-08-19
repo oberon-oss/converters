@@ -127,7 +127,12 @@ class BiDirectionalConvertersRegistryTest {
 
         BiDirectionalConverter<TestTarget, TestSource> reverseRegisteredConverter = registry.getConverterForClassTypes(TestTarget.class, TestSource.class);
 
-        assertNull(reverseRegisteredConverter);
+        assertNotNull(reverseRegisteredConverter);
+        assertNotSame(converter, reverseRegisteredConverter);
+        assertEquals(TestTarget.class, reverseRegisteredConverter.getSourceType());
+        assertEquals(TestSource.class, reverseRegisteredConverter.getTargetType());
+        assertEquals(new TestSource(123), reverseRegisteredConverter.getToTargetFunction().apply(new TestTarget("value-123")));
+        assertEquals(new TestTarget("value-123"), reverseRegisteredConverter.getToSourceFunction().apply(new TestSource(123)));
     }
 
     private record TestSource(int value) {

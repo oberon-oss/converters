@@ -58,16 +58,36 @@ public final class BiDirectionalConvertersRegistry {
      * @throws NullPointerException if either sourceType or targetType is null
      * @since 1.0.0
      */
-    @SuppressWarnings("unchecked")
-    public <S, T> @Nullable BiDirectionalConverter<S, T> getConverterForClassTypes(
-            @NotNull Class<S> sourceType,
-            @NotNull Class<T> targetType) {
+    public <S, T> @Nullable BiDirectionalConverter<S, T> getConverterForClassTypes(Class<S> sourceType, Class<T> targetType) {
         Objects.requireNonNull(sourceType, "Parameter: sourceType");
         Objects.requireNonNull(targetType, "Parameter: targetType");
 
+        BiDirectionalConverter<S, T> converter = getExactConverterForClassTypes(sourceType, targetType);
+
+        if (converter != null) {
+            LOGGER.debug("Found converter for types {} and {}", sourceType, targetType);
+            return converter;
+        }
+
+        BiDirectionalConverter<T, S> reverseConverter = getExactConverterForClassTypes(targetType, sourceType);
+
+        if (reverseConverter == null) {
+            return null;
+        }
+
+        LOGGER.debug("Found REVERSED converter for types {} and {}", targetType, sourceType);
+        return AbstractConverter.of(
+                sourceType,
+                targetType,
+                reverseConverter.getToSourceFunction(),
+                reverseConverter.getToTargetFunction());
+    }
+
+    @SuppressWarnings({"unchecked"})
+    private <S, T> @Nullable BiDirectionalConverter<S, T> getExactConverterForClassTypes(@NotNull Class<S> classType1, @NotNull Class<T> classType2) {
         return (BiDirectionalConverter<S, T>) converters.stream()
-                .filter(registeredConverter -> registeredConverter.getSourceType().equals(sourceType))
-                .filter(registeredConverter -> registeredConverter.getTargetType().equals(targetType))
+                .filter(registeredConverter -> registeredConverter.getSourceType().equals(classType1))
+                .filter(registeredConverter -> registeredConverter.getTargetType().equals(classType2))
                 .findFirst()
                 .orElse(null);
     }
@@ -84,10 +104,10 @@ public final class BiDirectionalConvertersRegistry {
      * @throws IllegalArgumentException if a converter for the same type pair is already registered
      * @since 1.0.0
      */
-    public void registerConverter(@NotNull BiDirectionalConverter<?, ?> converter) {
+    public void registerConverter(BiDirectionalConverter<?, ?> converter) {
         Objects.requireNonNull(converter, "Parameter: converter");
 
-        BiDirectionalConverter<?, ?> existingConverter = getConverterForClassTypes(
+        BiDirectionalConverter<?, ?> existingConverter = getExactConverterForClassTypes(
                 converter.getSourceType(),
                 converter.getTargetType());
 
@@ -97,7 +117,7 @@ public final class BiDirectionalConvertersRegistry {
                             .formatted(converter.getSourceType().getName(), converter.getTargetType().getName()));
         }
 
-        BiDirectionalConverter<?, ?> reverseConverter = getConverterForClassTypes(
+        BiDirectionalConverter<?, ?> reverseConverter = getExactConverterForClassTypes(
                 converter.getTargetType(),
                 converter.getSourceType());
 
@@ -110,11 +130,11 @@ public final class BiDirectionalConvertersRegistry {
                                     reverseConverter.getSourceType().getName(),
                                     reverseConverter.getTargetType().getName()));
         }
-
         LOGGER.info(
-                "Registered converter for source type {} and target type {}",
-                converter.getSourceType(),
-                converter.getTargetType());
+                "Registered converter for source type {} '{}' and target type '{}'",
+                (converter.getSourceType().isEnum() ? "(ENUM)" : ""),
+                converter.getSourceType().getSimpleName(),
+                converter.getTargetType().getSimpleName());
 
         converters.add(converter);
     }

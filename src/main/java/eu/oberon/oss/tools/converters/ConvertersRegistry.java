@@ -51,8 +51,10 @@ public final class ConvertersRegistry {
         }
 
         if (classType.isEnum()) {
-            LOGGER.info("Created converter for type {}", classType);
-            return new EnumConverter(classType);
+            converter = new EnumConverter(classType);
+            LOGGER.debug("Created ENUM converter for type {}", classType.getSimpleName());
+            registerConverter(converter);
+            return converter;
         }
 
         return null;
