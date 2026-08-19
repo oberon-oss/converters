@@ -31,7 +31,6 @@ class BiDirectionalConvertersRegistryTest {
         assertNull(converter);
     }
 
-    @SuppressWarnings("DataFlowIssue")
     @Test
     void testRegisterConverterRejectsNullConverter() {
         BiDirectionalConvertersRegistry registry = new BiDirectionalConvertersRegistry();
@@ -41,7 +40,6 @@ class BiDirectionalConvertersRegistryTest {
         assertEquals("Parameter: converter", exception.getMessage());
     }
 
-    @SuppressWarnings("DataFlowIssue")
     @Test
     void testGetConverterForClassTypesRejectsNullSourceType() {
         BiDirectionalConvertersRegistry registry = new BiDirectionalConvertersRegistry();
@@ -51,7 +49,6 @@ class BiDirectionalConvertersRegistryTest {
         assertEquals("Parameter: sourceType", exception.getMessage());
     }
 
-    @SuppressWarnings("DataFlowIssue")
     @Test
     void testGetConverterForClassTypesRejectsNullTargetType() {
         BiDirectionalConvertersRegistry registry = new BiDirectionalConvertersRegistry();
