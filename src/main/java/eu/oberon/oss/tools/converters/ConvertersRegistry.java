@@ -2,6 +2,7 @@ package eu.oberon.oss.tools.converters;
 
 import eu.oberon.oss.tools.converters.string.Converter;
 import eu.oberon.oss.tools.converters.string.std.EnumConverter;
+import eu.oberon.oss.tools.converters.util.LastUsedItemList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -70,5 +71,16 @@ public final class ConvertersRegistry {
     public void registerConverter(@NotNull Converter<?> converter) {
         Objects.requireNonNull(converter, "Parameter: converter");
         biDirectionalConvertersRegistry.registerConverter(converter);
+    }
+
+    /**
+     * Returns a converter factory for {@link LastUsedItemList} values.
+     *
+     * @return The converter factory.
+     *
+     * @since 1.2.0
+     */
+    public LastUsedItemListConverterFactory getLastUsedItemListConverterFactory() {
+        return new LastUsedItemListConverterFactory(this);
     }
 }

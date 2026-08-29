@@ -72,6 +72,11 @@ class ConvertersRegistryTest {
         assertSame(firstConverter, secondConverter);
     }
 
+    @Test
+    void testGetLastUsedItemListConverterFactory() {
+        assertNotNull(registry.getLastUsedItemListConverterFactory());
+    }
+
     @ParameterizedTest
     @MethodSource()
     void testConvertersRegistry(Class<?> classType, String value, Object expected) {
