@@ -10,9 +10,30 @@ import tools.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * A converter implementation for serializing and deserializing {@link LastUsedItemList} objects to and from {@link String} using a custom {@link Converter} for
+ * individual items within the list.
+ *
+ * <p>This class extends {@link AbstractStringConverter} to facilitate bidirectional conversion. It utilizes the Jackson {@link ObjectMapper} for JSON
+ * serialization and deserialization, enabling the representation of a {@link LastUsedItemList} as a JSON array of strings.</p>
+ *
+ * @param <I> The type of the individual items contained in the {@link LastUsedItemList}.
+ *
+ * @author TigerLilly64
+ * @since 1.0.0
+ */
 public class LastUsedItemListConverter<I> extends AbstractStringConverter<LastUsedItemList<I>> implements Converter<LastUsedItemList<I>> {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
+    /**
+     * Constructs a {@code LastUsedItemListConverter} that provides conversion between a {@link LastUsedItemList} and its {@link String} representation using a
+     * specified {@link Converter} for the items within the list.
+     *
+     * @param itemConverter A {@link Converter} implementation that defines the conversion logic for the individual items within the {@link LastUsedItemList}.
+     *                      Cannot be null.
+     *
+     * @since 1.0.0
+     */
     @SuppressWarnings("unchecked")
     public LastUsedItemListConverter(Converter<I> itemConverter) {
         super(

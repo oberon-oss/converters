@@ -105,13 +105,60 @@ class DefaultLastUsedItemListTest {
     }
 
     @Test
+    void testConstructorWithEmptyList() {
+        DefaultLastUsedItemList<Path> list = new DefaultLastUsedItemList<>(List.of());
+        assertEquals(0, list.currentSize());
+        assertEquals(0, list.getMaxSize(), "maxSize should be 0 to reflect the size of the initial list");
+    }
+
+    @Test
+    void testConstructorWithEmptyListAndMaxSize() {
+        DefaultLastUsedItemList<Path> list = new DefaultLastUsedItemList<>(List.of(), 5);
+        assertEquals(0, list.currentSize());
+        assertEquals(5, list.getMaxSize());
+    }
+
+    @Test
+    void testConstructorWithInvalidMaxSize() {
+        assertThrows(IllegalArgumentException.class, () -> new DefaultLastUsedItemList<>(0));
+        assertThrows(IllegalArgumentException.class, () -> new DefaultLastUsedItemList<>(-1));
+    }
+
+    @Test
+    void testConstructorWithListAndInvalidMaxSize() {
+        List<Path> paths = List.of(Path.of("file1"));
+        assertThrows(IllegalArgumentException.class, () -> new DefaultLastUsedItemList<>(paths, 0));
+        assertThrows(IllegalArgumentException.class, () -> new DefaultLastUsedItemList<>(paths, -1));
+    }
+
+    @Test
     void testConstructorWithNullListThrowsException() {
         assertThrows(NullPointerException.class, () -> new DefaultLastUsedItemList<Path>(null));
         assertThrows(NullPointerException.class, () -> new DefaultLastUsedItemList<Path>(null, 5));
     }
+    @Test
+    void testSetMaxSizeDoesNotTruncateIfSmaller() {
+        DefaultLastUsedItemList<Path> list = new DefaultLastUsedItemList<>(5);
+        list.add(Path.of("file1"));
+        list.add(Path.of("file2"));
+
+        assertEquals(2, list.currentSize());
+
+        list.setMaxSize(3);
+        assertEquals(2, list.currentSize(), "List should not be truncated as it's already smaller than new maxSize");
+        assertEquals(3, list.getMaxSize());
+    }
 
     @Test
-    void testConstructorWithEmptyListThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> new DefaultLastUsedItemList<>(List.of()));
+    void testSetMaxSizeToCurrentSize() {
+        DefaultLastUsedItemList<Path> list = new DefaultLastUsedItemList<>(2);
+        list.add(Path.of("file1"));
+        list.add(Path.of("file2"));
+
+        assertEquals(2, list.currentSize());
+
+        list.setMaxSize(2);
+        assertEquals(2, list.currentSize());
+        assertEquals(2, list.getMaxSize());
     }
 }

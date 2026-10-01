@@ -1,6 +1,8 @@
 package eu.oberon.oss.tools.converters.util;
 
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,10 +13,14 @@ import java.util.Objects;
  * <p>
  * This class provides functionality to add items, enforce a maximum size limit, and retrieve the list of recently used items.
  *
+ * @param <I> The type of items stored in the list.
+ *
  * @author TigerLilly64
  * @since 1.0.0
  */
 public final class DefaultLastUsedItemList<I> implements LastUsedItemList<I> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultLastUsedItemList.class);
+
     private final List<I> itemList;
 
     @Getter
@@ -40,22 +46,18 @@ public final class DefaultLastUsedItemList<I> implements LastUsedItemList<I> {
     /**
      * Constructs a new DefaultLastUsedItemList with a predefined list of items.
      * <p>
-     * The maximum size of the list will be set to the number of provided items.
+     * The maximum size of the list will be set to the number of provided items, or 1 if the list is empty.
      *
-     * @param itemList The list of initial items to populate the list with. Must not be null or empty.
+     * @param itemList The list of initial items to populate the list with. Must not be null.
      *
-     * @throws NullPointerException     if the parameter {@code items} is null.
-     * @throws IllegalArgumentException if the parameter {@code items} is empty.
+     * @throws NullPointerException if the parameter {@code items} is null.
      * @since 1.0.0
      */
     public DefaultLastUsedItemList(List<I> itemList) {
         Objects.requireNonNull(itemList, "Parameter: items");
-        if (itemList.isEmpty()) {
-            throw new IllegalArgumentException("Parameter 'items': must not be empty");
-        }
-
         this.itemList = new LinkedList<>(itemList);
         this.maxSize = itemList.size();
+
     }
 
     /**
@@ -65,20 +67,18 @@ public final class DefaultLastUsedItemList<I> implements LastUsedItemList<I> {
      * <p>
      * If the specified maximum size is less than the number of provided items, the list will be truncated to the specified maximum size.
      *
-     * @param itemList   The list of initial items to populate the list with. Must not be null or empty.
-     * @param maxSize The maximum size of the list. Must be greater than or equal to 1.
+     * @param itemList The list of initial items to populate the list with. Must not be null.
+     * @param maxSize  The maximum size of the list. Must be greater than or equal to 1.
      *
      * @throws NullPointerException     if the parameter {@code items} is null.
-     * @throws IllegalArgumentException if the parameter {@code items} is empty or if {@code maxSize} is less than 1.
+     * @throws IllegalArgumentException if {@code maxSize} is less than 1.
      */
     public DefaultLastUsedItemList(final List<I> itemList, int maxSize) {
         Objects.requireNonNull(itemList, "Parameter: items");
         if (maxSize < 1) {
             throw new IllegalArgumentException("Max size must be >= 1");
         }
-        if (itemList.isEmpty()) {
-            throw new IllegalArgumentException("Parameter 'items': must not be empty");
-        }
+
         this.itemList = new LinkedList<>(itemList);
 
         this.maxSize = Math.max(this.itemList.size(), maxSize);
@@ -106,7 +106,9 @@ public final class DefaultLastUsedItemList<I> implements LastUsedItemList<I> {
 
     @Override
     public void add(I item) {
-        itemList.remove(item);
+        if (itemList.remove(item)) {
+            LOGGER.info("Item {} already exists, moved to the top of the list.", item);
+        }
         itemList.addFirst(item);
         if (itemList.size() > maxSize) {
             itemList.removeLast();
@@ -121,5 +123,8 @@ public final class DefaultLastUsedItemList<I> implements LastUsedItemList<I> {
         return List.copyOf(itemList);
     }
 
+    @Override
+    public void clear() {
+        itemList.clear();
+    }
 }
-

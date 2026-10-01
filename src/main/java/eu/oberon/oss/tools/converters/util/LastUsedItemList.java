@@ -59,4 +59,11 @@ public interface LastUsedItemList<I> {
      * @since 1.0.0
      */
     int getMaxSize();
+
+    /**
+     * Clears the list of all items.
+     *
+     * @since 1.0.0
+     */
+    void clear();
 }

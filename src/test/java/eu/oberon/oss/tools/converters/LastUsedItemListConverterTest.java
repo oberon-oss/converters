@@ -56,6 +56,15 @@ class LastUsedItemListConverterTest {
     }
 
     @Test
+    void testConvertFromStringWithEmptyList() {
+        String json = "[]";
+        LastUsedItemList<Integer> list = converter.convertFromString().apply(json);
+        assertNotNull(list);
+        assertEquals(0, list.currentSize());
+        assertEquals(0, list.getMaxSize());
+    }
+
+    @Test
     void testConvertFromStringWithInvalidJsonThrowsException() {
         Function<String, LastUsedItemList<Integer>> foundConverter = this.converter.convertFromString();
         assertNotNull(foundConverter);
@@ -63,9 +72,12 @@ class LastUsedItemListConverterTest {
     }
 
     @Test
-    void testConvertFromStringWithEmptyListThrowsException() {
-        Function<String, LastUsedItemList<Integer>> foundConverter = this.converter.convertFromString();
-        assertNotNull(foundConverter);
-        assertThrows(IllegalArgumentException.class, () -> foundConverter.apply("[]"));
+    void testClearMethod() {
+        LastUsedItemList<Integer> list = new DefaultLastUsedItemList<>(List.of(1, 2, 3));
+        assertEquals(3, list.currentSize());
+        list.clear();
+        assertEquals(0, list.currentSize());
+        assertEquals(3, list.getMaxSize());
     }
+
 }
