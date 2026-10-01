@@ -25,6 +25,13 @@
         <url>https://github.com/oberon-oss/converters</url>
     </scm>
 
+    <properties>
+        <!--suppress XmlUnresolvedReference -->
+        <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <argLine/>
+        <sonar.projectKey>oberon-oss_converters</sonar.projectKey>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
