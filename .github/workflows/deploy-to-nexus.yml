@@ -1,0 +1,18 @@
+name: CI/CD Pipeline
+
+on:
+    push:
+        branches:
+            - main
+        tags:
+            - 'v*.*.*'
+    workflow_dispatch:
+
+jobs:
+    pipeline:
+        # v 2.0.4
+        uses: oberon-oss/github-workflows/.github/workflows/maven-pipeline.yml@16cc566411ee09de7233fade00bc26026feae6dd
+        secrets:
+            NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+            NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
