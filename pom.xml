@@ -6,19 +6,20 @@
 
     <parent>
         <groupId>eu.oberon-oss</groupId>
-        <artifactId>boms</artifactId>
-        <version>3.25.12</version>
+        <artifactId>parent</artifactId>
+        <version>4.25.1</version>
     </parent>
 
     <groupId>eu.oberon-oss.tools</groupId>
     <artifactId>converters</artifactId>
     <version>1.2.0</version>
 
-
     <name>Converter services library</name>
     <description>
-        Utility library providing basic converters for standard Java data items. It allows user-defined functions to perform conversion between classes – both ways.
+        Utility library providing basic converters for standard Java data items. It allows user-defined functions to perform conversion between classes – both
+        ways.
     </description>
+
     <scm>
         <connection>scm:git:https://github.com/oberon-oss/converters.git.</connection>
         <developerConnection>scm:git@github.com:oberon-oss/converters.git</developerConnection>
@@ -39,22 +40,27 @@
         </dependency>
 
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.6.3</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
 
         <dependency>
             <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>3.2.3</version>
             <scope>compile</scope>
+        </dependency>
+
+        <!-- test dependencies -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
